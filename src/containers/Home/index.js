@@ -2,20 +2,22 @@ import React from 'react';
 import { View, Text, Image, FlatList, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { useFocusEffect } from '@react-navigation/native';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import moment from 'moment';
 
-import { getCoinMarket } from '../../redux/market/marketActions';
-import MainLayout from '../MainLayout';
+import {
+  getCoinMarket,
+  setSelectedCoin,
+} from '../../redux/market/marketActions';
+import MainLayout from '../../components/MainLayout';
 import LineChartHome from '../../components/LineChartHome';
 import { useUSDIDR } from '../../services/REST/useUSDIDR';
 
 import { styles } from './components';
 import { SIZES, COLORS, FONTS, images } from '../../constants';
 
-const Home = ({ getCoinMarket, coins }) => {
+const Home = ({ getCoinMarket, coins, selectedCoin, setSelectedCoin }) => {
   let dt = new Date();
-  const [selectedCoin, setSelectedCoin] = React.useState(null);
   const { usdIdrRate } = useUSDIDR();
 
   useFocusEffect(
@@ -23,6 +25,28 @@ const Home = ({ getCoinMarket, coins }) => {
       getCoinMarket();
     }, [])
   );
+
+  React.useEffect(() => {
+    handleSelectedCoin('retrieve');
+  }, []);
+
+  const handleSelectedCoin = async (action, coin = null) => {
+    try {
+      if (action === 'retrieve') {
+        const jsonValue = await AsyncStorage.getItem('selectedCoin');
+        if (jsonValue !== null) {
+          const parsedCoin = JSON.parse(jsonValue);
+          setSelectedCoin(parsedCoin);
+        }
+      } else if (action === 'save' && coin) {
+        const jsonValue = JSON.stringify(coin);
+        await AsyncStorage.setItem('selectedCoin', jsonValue);
+        setSelectedCoin(coin);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   let startUnixTimestamp = moment().subtract(7, 'day').unix();
 
@@ -90,7 +114,9 @@ const Home = ({ getCoinMarket, coins }) => {
                 marginBottom: SIZES.radius,
               }}
             >
-              <Text style={styles.flatListTitle}>Top Cryptocurrency</Text>
+              <Text style={styles.flatListTitle}>
+                Top Smart Contract Platform
+              </Text>
             </View>
           }
           renderItem={({ item }) => {
@@ -104,7 +130,7 @@ const Home = ({ getCoinMarket, coins }) => {
             return (
               <TouchableOpacity
                 style={styles.coinItemContainer}
-                onPress={() => setSelectedCoin(item)}
+                onPress={() => handleSelectedCoin('save', item)}
               >
                 {/* Logo */}
                 <View style={{ width: 25 }}>
@@ -182,6 +208,7 @@ const Home = ({ getCoinMarket, coins }) => {
 function mapStateToProps(state) {
   return {
     coins: state.marketReducer.coins,
+    selectedCoin: state.marketReducer.selectedCoin,
   };
 }
 
@@ -208,6 +235,7 @@ function mapDispatchToProps(dispatch) {
         )
       );
     },
+    setSelectedCoin: coin => dispatch(setSelectedCoin(coin)),
   };
 }
 
