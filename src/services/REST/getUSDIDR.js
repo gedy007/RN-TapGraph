@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export const useUSDIDR = () => {
+export const getUSDIDR = () => {
   const [usdIdrRate, setUsdIdrRate] = useState(16000);
   const [loading, setLoading] = useState(true);
 

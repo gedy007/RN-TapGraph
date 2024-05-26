@@ -1,14 +1,16 @@
 import { useCallback, useState } from 'react';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { View, Text, FlatList, TouchableOpacity } from 'react-native';
 import MainLayout from '../../components/MainLayout';
 import { useFocusEffect } from '@react-navigation/native';
 import { useOrderBookStream } from '../../services/useWebSocket';
+import Loading from '../../components/Loading';
 import BidAskModal from '../../components/BidAskModal';
 import CandleChart from '../../components/CandleChart';
 import { styles } from './components';
 
-const OrderBook = ({ selectedCoin }) => {
+export default OrderBook = () => {
+  const { selectedCoin } = useSelector(state => state.market);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalType, setModalType] = useState('');
   const symbol = !selectedCoin ? 'ethusdt' : `${selectedCoin?.symbol}usdt`;
@@ -17,6 +19,7 @@ const OrderBook = ({ selectedCoin }) => {
     orderBook: { bids, asks },
     startOrderBookStream,
     stopOrderBookStream,
+    isLoading,
   } = useOrderBookStream(symbol);
 
   useFocusEffect(
@@ -63,76 +66,70 @@ const OrderBook = ({ selectedCoin }) => {
     setModalVisible(false);
   };
 
-  const handleSubmit = value => {
-    console.log(`${modalType} value:`, value);
-  };
-
   return (
     <MainLayout>
-      <View style={styles.container}>
-        <Text style={styles.header}>
-          Order Book (
-          {!selectedCoin ? 'ETH' : selectedCoin?.symbol.toUpperCase()})
-        </Text>
-        <CandleChart symbol={symbol} />
-        <View style={styles.bookContainer}>
-          <View style={styles.orderList}>
-            <Text style={styles.sectionHeader}>Market Jual</Text>
-            <FlatList
-              data={asks}
-              renderItem={renderAskItem}
-              keyExtractor={keyExtractor}
-              removeClippedSubviews={true}
-              initialNumToRender={20}
-              maxToRenderPerBatch={10}
-              windowSize={10}
-              ListHeaderComponent={flatListHeader}
-              scrollEnabled={false}
-            />
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <View style={styles.container}>
+          <Text style={styles.header}>
+            Order Book (
+            {!selectedCoin ? 'ETH' : selectedCoin?.symbol.toUpperCase()})
+          </Text>
+          <CandleChart symbol={symbol} />
+          <View style={styles.bookContainer}>
+            <View style={styles.orderList}>
+              <Text style={styles.sectionHeader}>Market Jual</Text>
+              <FlatList
+                data={asks}
+                renderItem={renderAskItem}
+                keyExtractor={keyExtractor}
+                removeClippedSubviews={true}
+                initialNumToRender={20}
+                maxToRenderPerBatch={10}
+                windowSize={10}
+                ListHeaderComponent={flatListHeader}
+                scrollEnabled={false}
+              />
+            </View>
+            <View style={styles.orderList}>
+              <Text style={styles.sectionHeader}>Market Beli</Text>
+              <FlatList
+                data={bids}
+                renderItem={renderBidItem}
+                keyExtractor={keyExtractor}
+                removeClippedSubviews={true}
+                initialNumToRender={20}
+                maxToRenderPerBatch={10}
+                windowSize={10}
+                ListHeaderComponent={flatListHeader}
+                scrollEnabled={false}
+                flexGrow={1}
+              />
+            </View>
           </View>
-          <View style={styles.orderList}>
-            <Text style={styles.sectionHeader}>Market Beli</Text>
-            <FlatList
-              data={bids}
-              renderItem={renderBidItem}
-              keyExtractor={keyExtractor}
-              removeClippedSubviews={true}
-              initialNumToRender={20}
-              maxToRenderPerBatch={10}
-              windowSize={10}
-              ListHeaderComponent={flatListHeader}
-              scrollEnabled={false}
-              flexGrow={1}
-            />
+          <View style={styles.rowButton}>
+            <TouchableOpacity
+              style={styles.buttonAsk}
+              onPress={() => handlePress('Ask')}
+            >
+              <Text style={styles.buttonText}>JUAL</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.buttonBid}
+              onPress={() => handlePress('Bid')}
+            >
+              <Text style={styles.buttonText}>BELI</Text>
+            </TouchableOpacity>
           </View>
         </View>
-      </View>
-      <View style={styles.rowButton}>
-        <TouchableOpacity
-          style={styles.buttonAsk}
-          onPress={() => handlePress('Ask')}
-        >
-          <Text style={styles.buttonText}>JUAL</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.buttonBid}
-          onPress={() => handlePress('Bid')}
-        >
-          <Text style={styles.buttonText}>BELI</Text>
-        </TouchableOpacity>
-      </View>
+      )}
       <BidAskModal
         isVisible={modalVisible}
         onClose={handleCloseModal}
-        onSubmit={handleSubmit}
+        onSubmit={() => {}}
         type={modalType}
       />
     </MainLayout>
   );
 };
-
-const mapStateToProps = state => ({
-  selectedCoin: state.marketReducer.selectedCoin,
-});
-
-export default connect(mapStateToProps)(OrderBook);

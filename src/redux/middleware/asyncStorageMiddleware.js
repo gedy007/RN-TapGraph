@@ -1,8 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const asyncStorageMiddleware = store => next => action => {
+const asyncStorageMiddleware = storeAPI => next => action => {
   const result = next(action);
-  const { selectedCoin } = store.getState().marketReducer;
+
+  const { selectedCoin } = storeAPI.getState().market;
 
   if (selectedCoin) {
     AsyncStorage.setItem('selectedCoin', JSON.stringify(selectedCoin))
