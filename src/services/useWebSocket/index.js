@@ -1,15 +1,16 @@
 import { useRef, useState, useEffect } from 'react';
 import { w3cwebsocket as W3CWebSocket } from 'websocket';
-import { useUSDIDR } from '../REST/useUSDIDR';
+import { getUSDIDR } from '../REST/getUSDIDR';
 import axios from 'axios';
 
 export const useOrderBookStream = symbol => {
-  const { usdIdrRate } = useUSDIDR();
+  const { usdIdrRate } = getUSDIDR();
 
   const [orderBook, setOrderBook] = useState({
     bids: [],
     asks: [],
   });
+  const [isLoading, setIsLoading] = useState(true);
   const clientRef = useRef(null);
 
   const startOrderBookStream = () => {
@@ -22,11 +23,13 @@ export const useOrderBookStream = symbol => {
 
     client.onopen = () => {
       console.log('OrderBookStream Client Connected');
+      setIsLoading(false);
     };
 
     client.onclose = () => {
       console.log('OrderBookStream Client Disconnected');
       clientRef.current = null;
+      setIsLoading(true);
     };
 
     client.onmessage = message => {
@@ -81,11 +84,12 @@ export const useOrderBookStream = symbol => {
     orderBook,
     startOrderBookStream,
     stopOrderBookStream,
+    isLoading,
   };
 };
 
 export const useCandlestickStream = symbol => {
-  const { usdIdrRate } = useUSDIDR();
+  const { usdIdrRate } = getUSDIDR();
   const [candlestickData, setCandlestickData] = useState([]);
   const clientRef = useRef(null);
 
@@ -108,9 +112,7 @@ export const useCandlestickStream = symbol => {
         low: parseFloat(candle[3] * usdIdrRate),
         close: parseFloat(candle[4] * usdIdrRate),
       }));
-      console.log('this is historicalData:', historicalData);
       setCandlestickData(historicalData);
-      console.log('Fetched historical data:', historicalData);
     } catch (error) {
       console.error('Error fetching historical data:', error);
     }

@@ -1,18 +1,19 @@
 import { configureStore } from '@reduxjs/toolkit';
-import rootReducer from './rootReducer';
-import { thunk } from 'redux-thunk';
 import asyncStorageMiddleware from './middleware/asyncStorageMiddleware';
+import marketSlice from './market/marketSlice';
 
 if (__DEV__) {
   require('../../ReactotronConfig');
 }
 
 export const store = configureStore({
-  reducer: rootReducer,
+  reducer: {
+    market: marketSlice,
+  },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
       serializableCheck: false,
-    }).concat(thunk, asyncStorageMiddleware),
+    }).concat(asyncStorageMiddleware),
 });
 
 export default store;

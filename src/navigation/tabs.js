@@ -1,17 +1,13 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { connect } from 'react-redux';
-import { setModalVisibility } from '../redux/tab/tabActions';
-
 import Home from '../containers/Home';
 import OrderBook from '../containers/OrderBook';
-
 import TabMenu from '../components/TabMenu';
 import { COLORS, images } from '../constants';
 
 const Tab = createBottomTabNavigator();
 
-const Tabs = () => {
+export default Tabs = () => {
   return (
     <Tab.Navigator
       screenOptions={{
@@ -64,20 +60,3 @@ const Tabs = () => {
     </Tab.Navigator>
   );
 };
-
-function mapStateToProps(state) {
-  return {
-    isModalVisible: state.tabReducer.isModalVisible,
-    selectedCoin: state.marketReducer.selectedCoin,
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    setModalVisibility: isVisible => {
-      return dispatch(setModalVisibility(isVisible));
-    },
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Tabs);

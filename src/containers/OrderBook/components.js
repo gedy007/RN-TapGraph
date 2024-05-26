@@ -31,7 +31,7 @@ export const styles = StyleSheet.create({
   rowButton: {
     flexDirection: 'row',
     position: 'absolute',
-    top: 630,
+    top: 570,
     left: 8,
     right: 8,
     justifyContent: 'space-between',

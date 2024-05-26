@@ -1,28 +1,27 @@
 import React from 'react';
 import { View, Text, Image, FlatList, TouchableOpacity } from 'react-native';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import moment from 'moment';
 
-import {
-  getCoinMarket,
-  setSelectedCoin,
-} from '../../redux/market/marketActions';
+import { getCoinMarket, setSelectedCoin } from '../../redux/market/marketSlice';
 import MainLayout from '../../components/MainLayout';
 import LineChartHome from '../../components/LineChartHome';
-import { useUSDIDR } from '../../services/REST/useUSDIDR';
+import { getUSDIDR } from '../../services/REST/getUSDIDR';
 
 import { styles } from './components';
 import { SIZES, COLORS, FONTS, images } from '../../constants';
 
-const Home = ({ getCoinMarket, coins, selectedCoin, setSelectedCoin }) => {
+export default Home = () => {
+  const dispatch = useDispatch();
+  const { coins, selectedCoin } = useSelector(state => state.market);
   let dt = new Date();
-  const { usdIdrRate } = useUSDIDR();
+  const { usdIdrRate } = getUSDIDR();
 
   useFocusEffect(
     React.useCallback(() => {
-      getCoinMarket();
+      dispatch(getCoinMarket());
     }, [])
   );
 
@@ -36,12 +35,12 @@ const Home = ({ getCoinMarket, coins, selectedCoin, setSelectedCoin }) => {
         const jsonValue = await AsyncStorage.getItem('selectedCoin');
         if (jsonValue !== null) {
           const parsedCoin = JSON.parse(jsonValue);
-          setSelectedCoin(parsedCoin);
+          dispatch(setSelectedCoin(parsedCoin));
         }
       } else if (action === 'save' && coin) {
         const jsonValue = JSON.stringify(coin);
         await AsyncStorage.setItem('selectedCoin', jsonValue);
-        setSelectedCoin(coin);
+        dispatch(setSelectedCoin(coin));
       }
     } catch (e) {
       console.error(e);
@@ -115,7 +114,7 @@ const Home = ({ getCoinMarket, coins, selectedCoin, setSelectedCoin }) => {
               }}
             >
               <Text style={styles.flatListTitle}>
-                Top Smart Contract Platform
+                Top Smart Contract Platform in 7d
               </Text>
             </View>
           }
@@ -204,39 +203,3 @@ const Home = ({ getCoinMarket, coins, selectedCoin, setSelectedCoin }) => {
     </MainLayout>
   );
 };
-
-function mapStateToProps(state) {
-  return {
-    coins: state.marketReducer.coins,
-    selectedCoin: state.marketReducer.selectedCoin,
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    getCoinMarket: (
-      currency,
-      coinList,
-      orderBy,
-      sparkline,
-      priceChangePerc,
-      perPage,
-      page
-    ) => {
-      return dispatch(
-        getCoinMarket(
-          currency,
-          coinList,
-          orderBy,
-          sparkline,
-          priceChangePerc,
-          perPage,
-          page
-        )
-      );
-    },
-    setSelectedCoin: coin => dispatch(setSelectedCoin(coin)),
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Home);

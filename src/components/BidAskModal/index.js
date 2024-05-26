@@ -1,4 +1,4 @@
-import React, {useRef, useEffect} from 'react';
+import React, { useRef, useEffect } from 'react';
 import {
   View,
   Text,
@@ -9,14 +9,12 @@ import {
   StyleSheet,
   Dimensions,
 } from 'react-native';
-import {COLORS, images} from '../../constants';
+import { COLORS, images } from '../../constants';
 
-const {height} = Dimensions.get('window');
+const { height } = Dimensions.get('window');
 
-const BidAskModal = ({isVisible, onClose}) => {
-  const slideAnim = useRef(
-    new Animated.Value(height),
-  ).current;
+const BidAskModal = ({ isVisible, onClose }) => {
+  const slideAnim = useRef(new Animated.Value(height)).current;
 
   useEffect(() => {
     if (isVisible) {
@@ -39,10 +37,7 @@ const BidAskModal = ({isVisible, onClose}) => {
   };
 
   return (
-    <Modal
-      transparent
-      visible={isVisible}
-      animationType="none">
+    <Modal transparent visible={isVisible} animationType="none">
       <View style={styles.modalOverlay}>
         <TouchableOpacity
           style={styles.overlay}
@@ -53,27 +48,22 @@ const BidAskModal = ({isVisible, onClose}) => {
           style={[
             styles.modalContainer,
             {
-              transform: [
-                {translateY: slideAnim},
-              ],
+              transform: [{ translateY: slideAnim }],
             },
-          ]}>
+          ]}
+        >
           <Text style={styles.modalTitle}>
             Fitur Jual/Beli Akan Segera Hadir!
           </Text>
-          <View style={{alignItems: 'center'}}>
+          <View style={{ alignItems: 'center' }}>
             <Image
               source={images.jualBeliComingSoon}
               style={styles.jualBeliComingSoon}
               resizeMode="contain"
             />
           </View>
-          <TouchableOpacity
-            style={styles.submitButton}
-            onPress={handleSubmit}>
-            <Text style={styles.buttonText}>
-              Close
-            </Text>
+          <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
+            <Text style={styles.buttonText}>Close</Text>
           </TouchableOpacity>
         </Animated.View>
       </View>
