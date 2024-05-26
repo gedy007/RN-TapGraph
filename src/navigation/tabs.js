@@ -2,10 +2,10 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { connect } from 'react-redux';
 import { setModalVisibility } from '../redux/tab/tabActions';
-//containers
+
 import Home from '../containers/Home';
 import OrderBook from '../containers/OrderBook';
-//components & constants
+
 import TabMenu from '../components/TabMenu';
 import { COLORS, images } from '../constants';
 
@@ -68,6 +68,7 @@ const Tabs = () => {
 function mapStateToProps(state) {
   return {
     isModalVisible: state.tabReducer.isModalVisible,
+    selectedCoin: state.marketReducer.selectedCoin,
   };
 }
 

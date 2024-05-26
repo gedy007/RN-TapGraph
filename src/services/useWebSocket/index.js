@@ -89,7 +89,6 @@ export const useCandlestickStream = symbol => {
   const [candlestickData, setCandlestickData] = useState([]);
   const clientRef = useRef(null);
 
-  // Fetch historical data
   const fetchHistoricalData = async () => {
     try {
       const response = await axios.get(

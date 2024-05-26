@@ -44,13 +44,14 @@ export const styles = StyleSheet.create({
     backgroundColor: '#e6ffe6',
   },
   price: {
-    flex: 1,
-    textAlign: 'right',
+    flex: 2,
+    textAlign: 'center',
     ...FONTS.body4,
+    width: 800,
   },
   volume: {
     flex: 1,
-    textAlign: 'right',
+    textAlign: 'center',
     ...FONTS.body4,
   },
   sectionHeader: {
@@ -68,10 +69,18 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 8,
     backgroundColor: COLORS.secondary,
   },
-  flatListHeaderText: {
+  flatListHeaderTextPrice: {
+    flex: 2,
+    fontWeight: 'bold',
+    textAlign: 'center',
+
+    color: COLORS.white,
+  },
+  flatListHeaderTextVol: {
     flex: 1,
     fontWeight: 'bold',
     textAlign: 'center',
+
     color: COLORS.white,
   },
   buttonBid: {

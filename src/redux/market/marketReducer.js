@@ -2,6 +2,7 @@ import * as marketActions from './marketActions';
 
 const initialState = {
   coins: [],
+  selectedCoin: null,
   error: null,
   loading: false,
 };
@@ -22,6 +23,11 @@ const marketReducer = (state = initialState, action) => {
       return {
         ...state,
         error: action.payload.error,
+      };
+    case marketActions.SET_SELECTED_COIN:
+      return {
+        ...state,
+        selectedCoin: action.payload,
       };
     default:
       return state;

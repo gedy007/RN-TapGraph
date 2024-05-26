@@ -1,15 +1,17 @@
-import { useCallback, useState, useEffect } from 'react';
+import { useCallback, useState } from 'react';
+import { connect } from 'react-redux';
 import { View, Text, FlatList, TouchableOpacity } from 'react-native';
-import MainLayout from '../MainLayout';
+import MainLayout from '../../components/MainLayout';
 import { useFocusEffect } from '@react-navigation/native';
 import { useOrderBookStream } from '../../services/useWebSocket';
 import BidAskModal from '../../components/BidAskModal';
 import CandleChart from '../../components/CandleChart';
 import { styles } from './components';
 
-const OrderBook = ({ symbol = 'bnbusdt' }) => {
+const OrderBook = ({ selectedCoin }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [modalType, setModalType] = useState('');
+  const symbol = !selectedCoin ? 'ethusdt' : `${selectedCoin?.symbol}usdt`;
 
   const {
     orderBook: { bids, asks },
@@ -34,12 +36,21 @@ const OrderBook = ({ symbol = 'bnbusdt' }) => {
     []
   );
 
+  const renderAskItem = useCallback(
+    ({ item }) => renderItem({ item, type: 'ask' }),
+    [renderItem]
+  );
+  const renderBidItem = useCallback(
+    ({ item }) => renderItem({ item, type: 'bid' }),
+    [renderItem]
+  );
+
   const keyExtractor = useCallback((item, index) => `${item[0]}-${index}`, []);
 
   const flatListHeader = () => (
     <View style={styles.flatListHeaderRow}>
-      <Text style={styles.flatListHeaderText}>Harga</Text>
-      <Text style={styles.flatListHeaderText}>Vol</Text>
+      <Text style={styles.flatListHeaderTextPrice}>Harga</Text>
+      <Text style={styles.flatListHeaderTextVol}>Vol</Text>
     </View>
   );
 
@@ -59,30 +70,31 @@ const OrderBook = ({ symbol = 'bnbusdt' }) => {
   return (
     <MainLayout>
       <View style={styles.container}>
-        <Text style={styles.header}>Order Book ({symbol.toUpperCase()})</Text>
+        <Text style={styles.header}>
+          Order Book (
+          {!selectedCoin ? 'ETH' : selectedCoin?.symbol.toUpperCase()})
+        </Text>
         <CandleChart symbol={symbol} />
         <View style={styles.bookContainer}>
           <View style={styles.orderList}>
             <Text style={styles.sectionHeader}>Market Jual</Text>
-            <View style={styles.asks}>
-              <FlatList
-                data={asks}
-                renderItem={({ item }) => renderItem({ item, type: 'ask' })}
-                keyExtractor={keyExtractor}
-                removeClippedSubviews={true}
-                initialNumToRender={20}
-                maxToRenderPerBatch={10}
-                windowSize={10}
-                ListHeaderComponent={flatListHeader}
-                scrollEnabled={false}
-              />
-            </View>
+            <FlatList
+              data={asks}
+              renderItem={renderAskItem}
+              keyExtractor={keyExtractor}
+              removeClippedSubviews={true}
+              initialNumToRender={20}
+              maxToRenderPerBatch={10}
+              windowSize={10}
+              ListHeaderComponent={flatListHeader}
+              scrollEnabled={false}
+            />
           </View>
           <View style={styles.orderList}>
             <Text style={styles.sectionHeader}>Market Beli</Text>
             <FlatList
               data={bids}
-              renderItem={({ item }) => renderItem({ item, type: 'bid' })}
+              renderItem={renderBidItem}
               keyExtractor={keyExtractor}
               removeClippedSubviews={true}
               initialNumToRender={20}
@@ -119,4 +131,8 @@ const OrderBook = ({ symbol = 'bnbusdt' }) => {
   );
 };
 
-export default OrderBook;
+const mapStateToProps = state => ({
+  selectedCoin: state.marketReducer.selectedCoin,
+});
+
+export default connect(mapStateToProps)(OrderBook);
