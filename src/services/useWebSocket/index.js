@@ -23,7 +23,6 @@ export const useOrderBookStream = symbol => {
 
     client.onopen = () => {
       console.log('OrderBookStream Client Connected');
-      setIsLoading(false);
     };
 
     client.onclose = () => {
@@ -66,6 +65,7 @@ export const useOrderBookStream = symbol => {
         bids: convertedBids.slice(0, 6),
         asks: convertedAsks.slice(0, 6),
       }); // Limit data to 6 items
+      setIsLoading(false);
     };
 
     client.onerror = error => {
