@@ -69,7 +69,6 @@ export default Home = () => {
         <View
           style={{
             flexDirection: 'row',
-            alignItems: 'auto',
           }}
         >
           <Text style={styles.header}>Home</Text>
@@ -143,7 +142,7 @@ export default Home = () => {
                 </View>
 
                 {/* Name */}
-                <View style={{ flex: 1 }}>
+                <View style={{ flex: 1, justifyContent: 'center' }}>
                   <Text style={styles.coinName}>{item.name}</Text>
                 </View>
 

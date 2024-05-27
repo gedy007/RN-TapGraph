@@ -58,6 +58,12 @@ export const styles = StyleSheet.create({
     width: 20,
   },
   coinName: {
+    textAlign: 'left',
+    justifyContent: 'center',
+    paddingLeft: 4,
+    height: 20,
+    lineHeight: 20,
+
     color: COLORS.white,
     ...FONTS.h3,
   },
