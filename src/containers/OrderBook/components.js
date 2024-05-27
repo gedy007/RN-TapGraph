@@ -31,10 +31,10 @@ export const styles = StyleSheet.create({
   rowButton: {
     flexDirection: 'row',
     position: 'absolute',
-    top: 570,
+    top: 580,
     left: 8,
     right: 8,
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     alignItems: 'center',
   },
   ask: {
@@ -86,6 +86,7 @@ export const styles = StyleSheet.create({
   buttonBid: {
     backgroundColor: COLORS.green,
     paddingVertical: 10,
+    marginHorizontal: 8,
     width: 180,
     marginVertical: 10,
     borderRadius: 5,
@@ -93,6 +94,7 @@ export const styles = StyleSheet.create({
   buttonAsk: {
     backgroundColor: COLORS.red,
     paddingVertical: 10,
+    marginHorizontal: 8,
     width: 180,
     marginVertical: 10,
     borderRadius: 5,

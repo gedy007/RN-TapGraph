@@ -1,5 +1,6 @@
 import React from 'react';
-import { Animated, StatusBar, SafeAreaView, StyleSheet } from 'react-native';
+import { Animated, StatusBar, StyleSheet } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { COLORS, SIZES } from '../../constants';
 
