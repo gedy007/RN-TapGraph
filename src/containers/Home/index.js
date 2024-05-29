@@ -47,12 +47,12 @@ export default Home = () => {
     }
   };
 
-  let startUnixTimestamp = moment().subtract(7, 'day').unix();
+  const startUnixTimestamp = moment().subtract(7, 'day').unix();
 
-  let data = selectedCoin
+  const data = selectedCoin
     ? selectedCoin?.sparkline_in_7d?.price?.map((item, index) => {
         return {
-          timestamp: (startUnixTimestamp + (index + 1) * 3600) * 1000,
+          timestamp: (startUnixTimestamp + index * 3600) * 1000,
           value: item * usdIdrRate,
         };
       })
@@ -118,7 +118,7 @@ export default Home = () => {
             </View>
           }
           renderItem={({ item }) => {
-            let priceColor =
+            const priceColor =
               item.price_change_percentage_7d_in_currency == 0
                 ? COLORS.lightGray3
                 : item.price_change_percentage_7d_in_currency > 0
