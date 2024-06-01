@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Platform } from 'react-native';
-import { Provider } from 'react-redux';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import * as Font from 'expo-font';
 import { preventAutoHideAsync, hideAsync } from 'expo-splash-screen';
-import store from '../redux/store';
 
 import Tabs from '../navigation/tabs';
 
@@ -13,6 +11,10 @@ const fetchFonts = async () => {
     helvetica: require('../../assets/fonts/Helvetica.ttf'),
   });
 };
+
+if (__DEV__) {
+  require('../../ReactotronConfig');
+}
 
 const App = () => {
   const [appIsReady, setAppIsReady] = useState(false);
@@ -38,11 +40,9 @@ const App = () => {
   }
 
   return (
-    <Provider store={store}>
-      <SafeAreaProvider>
-        <Tabs />
-      </SafeAreaProvider>
-    </Provider>
+    <SafeAreaProvider>
+      <Tabs />
+    </SafeAreaProvider>
   );
 };
 
