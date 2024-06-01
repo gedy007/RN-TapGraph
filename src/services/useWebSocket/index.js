@@ -1,11 +1,9 @@
 import { useRef, useState, useEffect } from 'react';
 import { w3cwebsocket as W3CWebSocket } from 'websocket';
-import { getUSDIDR } from '../REST/getUSDIDR';
+import { useUSDIDR } from '../rest/useUSDIDR';
 import axios from 'axios';
 
-export const useOrderBookStream = symbol => {
-  const { usdIdrRate } = getUSDIDR();
-
+export const useOrderBookStream = (symbol, usdIdrRate) => {
   const [orderBook, setOrderBook] = useState({
     bids: [],
     asks: [],
@@ -26,9 +24,9 @@ export const useOrderBookStream = symbol => {
     };
 
     client.onclose = () => {
-      console.log('OrderBookStream Client Disconnected');
       clientRef.current = null;
       setIsLoading(true);
+      console.log('OrderBookStream Client Disconnected');
     };
 
     client.onmessage = message => {
@@ -78,6 +76,8 @@ export const useOrderBookStream = symbol => {
       clientRef.current.close();
       clientRef.current = null;
     }
+    setIsLoading(true);
+    console.log('OrderBookStream stopOrderBookStream');
   };
 
   return {
@@ -88,8 +88,7 @@ export const useOrderBookStream = symbol => {
   };
 };
 
-export const useCandlestickStream = symbol => {
-  const { usdIdrRate } = getUSDIDR();
+export const useCandlestickStream = (symbol, usdIdrRate) => {
   const [candlestickData, setCandlestickData] = useState([]);
   const clientRef = useRef(null);
 

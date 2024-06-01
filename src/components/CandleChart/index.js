@@ -6,9 +6,9 @@ import { useCandlestickStream } from '../../services/useWebSocket';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { COLORS, FONTS } from '../../constants';
 
-const CandleChart = ({ symbol }) => {
+const CandleChart = ({ symbol, usdIdrRate }) => {
   const { candlestickData, startCandlestickStream, stopCandlestickStream } =
-    useCandlestickStream(symbol);
+    useCandlestickStream(symbol, usdIdrRate);
 
   useFocusEffect(
     React.useCallback(() => {
