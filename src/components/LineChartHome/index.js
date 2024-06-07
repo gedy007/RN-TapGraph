@@ -5,7 +5,7 @@ import { COLORS } from '../../constants';
 
 export default LineChartHome = ({ chartPrices }) => {
   return (
-    <View style={{ height: 120 }}>
+    <View style={{ height: 120 }} testID="LineChartHome">
       <GestureHandlerRootView>
         <LineChart.Provider data={chartPrices}>
           <LineChart height={120}>

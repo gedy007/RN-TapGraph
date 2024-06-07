@@ -34,6 +34,7 @@ export default Tabs = () => {
       <Tab.Screen
         name="Home"
         component={Home}
+        testID="HomeTab"
         options={{
           tabBarIcon: ({ focused }) => {
             return (
@@ -45,6 +46,7 @@ export default Tabs = () => {
       <Tab.Screen
         name="Order Book"
         component={OrderBook}
+        testID="OrderBookTab"
         options={{
           tabBarIcon: ({ focused }) => {
             return (

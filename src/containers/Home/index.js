@@ -67,7 +67,9 @@ export default Home = () => {
               flexDirection: 'row',
             }}
           >
-            <Text style={styles.header}>Home</Text>
+            <Text style={styles.header} testID="HomeHeader">
+              Home
+            </Text>
 
             <View style={styles.dateContainer}>
               <Text style={styles.day}>{moment(dt).format('dddd')}</Text>
@@ -84,7 +86,9 @@ export default Home = () => {
           >
             <Text style={styles.coinSymbol}>
               {'\u0024'}
-              {selectedCoin ? selectedCoin?.symbol : coinMarketData[0]?.symbol}
+              {selectedCoin
+                ? selectedCoin?.symbol
+                : coinMarketData?.[0]?.symbol}
             </Text>
             <Text style={styles.currentPrice}>
               IDR{' '}
@@ -101,6 +105,7 @@ export default Home = () => {
           <FlatList
             data={coinMarketData}
             keyExtractor={item => item.id}
+            testID="coinMarketFlatList"
             contentContainerStyle={styles.contentContainerStyle}
             ListHeaderComponent={
               <View
@@ -125,6 +130,7 @@ export default Home = () => {
                 <TouchableOpacity
                   style={styles.coinItemContainer}
                   onPress={() => handleSelectedCoin('save', item)}
+                  testID={item.name}
                 >
                   {/* Logo */}
                   <View style={{ width: 25 }}>
