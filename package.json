@@ -4,11 +4,16 @@
   "version": "1.0.0",
   "scripts": {
     "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
+    "prebuild": "expo prebuild",
+    "android": "expo run:android",
+    "android-build-local": "eas build --platform android --local",
+    "ios-build-local": "eas build --platform ios --local",
+    "ios": "expo run:ios",
     "web": "expo start --web",
     "test": "jest --watchAll",
-    "lint": "expo lint"
+    "lint": "expo lint",
+    "wdio-ios": "wdio run ./wdio-ios.conf.js",
+    "wdio-android": "wdio run ./wdio-android.conf.js"
   },
   "jest": {
     "preset": "jest-expo"
@@ -22,6 +27,7 @@
     "axios": "^1.7.2",
     "expo": "~51.0.8",
     "expo-constants": "~16.0.1",
+    "expo-dev-client": "^4.0.15",
     "expo-font": "~12.0.5",
     "expo-linking": "~6.3.1",
     "expo-router": "~3.5.14",
@@ -32,25 +38,36 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-native": "0.74.1",
+    "react-native-gesture-handler": "^2.16.2",
     "react-native-reanimated": "~3.10.1",
-    "react-native-safe-area-context": "4.10.1",
-    "react-native-screens": "3.31.1",
+    "react-native-safe-area-context": "^4.10.1",
+    "react-native-screens": "^3.31.1",
     "react-native-wagmi-charts": "^2.5.1",
     "react-native-web": "~0.19.10",
     "react-redux": "^9.1.2",
-    "websocket": "^1.0.35"
+    "websocket": "^1.0.35",
+    "react-native-svg": "15.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "@types/jest": "^29.5.12",
     "@types/react": "~18.2.45",
     "@types/react-test-renderer": "^18.0.7",
+    "@wdio/appium-service": "^8.38.0",
+    "@wdio/cli": "^8.38.1",
+    "@wdio/cucumber-framework": "^8.38.0",
+    "@wdio/local-runner": "^8.38.0",
+    "@wdio/spec-reporter": "^8.38.0",
+    "appium-xcuitest-driver": "^7.16.2",
     "babel-preset-expo": "^11.0.6",
     "jest": "^29.2.1",
     "jest-expo": "~51.0.2",
     "react-test-renderer": "18.2.0",
     "reactotron-react-native": "^5.1.7",
-    "typescript": "~5.3.3"
+    "ts-node": "^10.9.2",
+    "typescript": "~5.3.3",
+    "webdriverio": "^8.38.0"
   },
-  "private": true
+  "private": true,
+  "appium": {}
 }
